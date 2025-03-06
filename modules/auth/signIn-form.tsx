@@ -21,8 +21,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function SignInForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -35,6 +37,10 @@ export function SignInForm() {
   function onSubmit(values: z.infer<typeof loginSchema>) {
     console.log(values);
   }
+  const navigateToDashboard = () => {
+    // Navigate to the dashboard
+    router.push("/dashboard");
+  };
 
   return (
     <Form {...form}>
@@ -97,7 +103,11 @@ export function SignInForm() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    onClick={navigateToDashboard}
+                  >
                     Login
                   </Button>
                 </form>
