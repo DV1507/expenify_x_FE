@@ -22,9 +22,11 @@ import {
 } from "@/components/ui/form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLoginUser } from "./repo-service";
 
 export function SignInForm() {
   const router = useRouter();
+  const { handleLoginUser, isLoading } = useLoginUser();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -34,12 +36,13 @@ export function SignInForm() {
     mode: "onChange",
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    const res = await handleLoginUser(values);
+    console.log(res, "response");
   }
   const navigateToDashboard = () => {
     // Navigate to the dashboard
-    router.push("/dashboard");
+    // router.push("/dashboard");
   };
 
   return (
@@ -55,9 +58,6 @@ export function SignInForm() {
           <CardContent>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full">
-                  Login with Apple
-                </Button>
                 <Button variant="outline" className="w-full">
                   Login with Google
                 </Button>

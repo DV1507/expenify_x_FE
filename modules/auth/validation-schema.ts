@@ -27,13 +27,22 @@ export const loginSchema = z.object({
 
 export const signupSchema = z
   .object({
-    username: z
+    first_name: z
       .string({
-        invalid_type_error: "Your password must contain at least 8 characters.",
+        invalid_type_error: "Your first name must be a valid string.",
         required_error: "You must fill in this field.",
       })
-      .min(6)
-      .max(30),
+      .min(2, "First name must be at least 2 characters.")
+      .max(30, "First name must not exceed 30 characters."),
+
+    last_name: z
+      .string({
+        invalid_type_error: "Your last name must be a valid string.",
+        required_error: "You must fill in this field.",
+      })
+      .min(2, "Last name must be at least 2 characters.")
+      .max(30, "Last name must not exceed 30 characters."),
+
     email: z
       .string({
         required_error:
@@ -42,23 +51,25 @@ export const signupSchema = z
       .email({
         message: "Please provide a valid email address.",
       }),
+
     password: z
       .string({
         invalid_type_error: "Your password must contain at least 8 characters.",
         required_error: "You must fill in this field.",
       })
-      .min(8),
+      .min(8, "Password must be at least 8 characters long."),
+
     confirmPassword: z.string({
       required_error: "You must fill in this field.",
     }),
-    privacyAccepted: z.literal(true),
+
+    // privacyAccepted: z.literal(true, {
+    //   errorMap: () => ({
+    //     message: "You must accept the privacy policy.",
+    //   }),
+    // }),
   })
-  .refine(
-    (values) => {
-      return values.password === values.confirmPassword;
-    },
-    {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    }
-  );
+  .refine((values) => values.password === values.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
