@@ -22,3 +22,12 @@ export const useLoginUser = () => {
   };
   return { handleLoginUser, isError, isLoading };
 };
+
+export const useGoogleLoginService = () => {
+  const { isError, isLoading, postData } = usePost();
+  const handleGoogleLoginUser = async (data: { credential: string }) => {
+    const response = await postData(`${authBasePath}/google`, data);
+    return response;
+  };
+  return { handleGoogleLoginUser, isError, isLoading };
+};

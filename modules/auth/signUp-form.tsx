@@ -44,7 +44,6 @@ export function SignUpForm() {
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
     const { confirmPassword, ...payload } = values;
     const response = await handleRegisterUser(payload);
-    console.log(response, "response");
   };
 
   const [showPassword, setShowPassword] = useState<{

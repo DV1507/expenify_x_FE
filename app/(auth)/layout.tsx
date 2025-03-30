@@ -1,6 +1,7 @@
 import { DarkModeToggle } from "@/components/dark-mode-toogle";
 import { HandCoins } from "lucide-react";
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { NEXT_PUBLIC_GOOGLE_CLIENT_ID } from "../config";
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10 dark:bg-black/50">
@@ -12,7 +13,9 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
           ExpensifyX
         </a>
-        {children}
+        <GoogleOAuthProvider clientId={NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+          {children}
+        </GoogleOAuthProvider>
       </div>
     </div>
   );

@@ -22,11 +22,13 @@ import {
 } from "@/components/ui/form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import GoogleLoginButton from "./googleSignInButton";
 import { useLoginUser } from "./repo-service";
 
 export function SignInForm() {
   const router = useRouter();
-  const { handleLoginUser, isLoading } = useLoginUser();
+  const { handleLoginUser } = useLoginUser();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -38,11 +40,12 @@ export function SignInForm() {
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const res = await handleLoginUser(values);
-    console.log(res, "response");
+    if (res) navigateToDashboard();
   }
+
   const navigateToDashboard = () => {
     // Navigate to the dashboard
-    // router.push("/dashboard");
+    router.push("/dashboard");
   };
 
   return (
@@ -58,9 +61,7 @@ export function SignInForm() {
           <CardContent>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full">
-                  Login with Google
-                </Button>
+                <GoogleLoginButton />
               </div>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">

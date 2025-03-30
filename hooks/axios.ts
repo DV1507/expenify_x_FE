@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
 // Define API Response Type
 interface ApiResponse<T> {
   data: T | null;
@@ -8,8 +10,9 @@ interface ApiResponse<T> {
   isError: string | null;
   refetch: () => void;
 }
+
 // Create an Axios instance
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL, // Backend API URL from .env
   withCredentials: true, // Allows sending cookies with requests
   headers: {
@@ -17,6 +20,31 @@ const axiosInstance = axios.create({
   },
 });
 
+// Response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => {
+    const { data } = response;
+    if (data?.toast) {
+      toast.success(data.message || "", {
+        duration: 3000,
+        richColors: true,
+        dismissible: true,
+        classNames: {
+          success: "text-green-200",
+        },
+      });
+    }
+    return response;
+  },
+  (error) => {
+    const { data } = error.response;
+    toast.error(data.message || "", {
+      duration: 3000,
+      dismissible: true,
+      richColors: true,
+    });
+  }
+);
 export function useGet<T>(
   url: string,
   options?: AxiosRequestConfig
