@@ -13,6 +13,7 @@ export default function GoogleLoginButton() {
 
   const navigateToDashboard = () => {
     // Navigate to the dashboard
+    console.log("navigateToDashboard");
     router.push("/dashboard");
   };
 
